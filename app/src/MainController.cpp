@@ -67,12 +67,17 @@ void MainController::draw_skybox() {
 void MainController::draw_livada() {
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
     auto shader = engine::core::Controller::get<engine::resources::ResourcesController>()->shader("basic");
-    auto plane = engine::core::Controller::get<engine::resources::ResourcesController>()->model("livada");
+    auto livada = engine::core::Controller::get<engine::resources::ResourcesController>()->model("livada");
     shader->use();
     shader->set_mat4("projection", graphics->projection_matrix());
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_mat4("model", glm::mat4(1.0f));
-    plane->draw(shader);
+    shader->set_vec3("viewPos", graphics->camera()->Position);
+    shader->set_vec3("dirLightDirection", glm::normalize(glm::vec3(-0.8f, -1.0f, -0.3f)));
+    shader->set_vec3("dirLightAmbient", glm::vec3(0.05f, 0.05f, 0.15f));
+    shader->set_vec3("dirLightDiffuse", glm::vec3(0.2f, 0.2f, 0.4f));
+    shader->set_float("shininess", 65.0f);
+    livada->draw(shader);
 }
 
 void MainController::update_camera() {
