@@ -1,10 +1,16 @@
-
 #ifndef MAINCONTROLLER_HPP
 #define MAINCONTROLLER_HPP
 
 #include <engine/core/Engine.hpp>
 
 namespace app {
+class MainPlatformEventObserver final : public engine::platform::PlatformEventObserver {
+public:
+    void on_key(engine::platform::Key key) override;
+
+    void on_mouse_move(engine::platform::MousePosition position) override;
+};
+
 class MainController final : public engine::core::Controller {
 public:
     std::string_view name() const override {
@@ -24,7 +30,11 @@ private:
 
     void draw() override;
 
+    void draw_livada();
+
     void end_draw() override;
+
+    void draw_skybox();
 
     void update_camera();
 

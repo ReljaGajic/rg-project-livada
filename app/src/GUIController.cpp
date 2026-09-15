@@ -26,4 +26,4 @@ void GUIController::draw() {
     ImGui::End();
     graphics->end_gui();
 }
-}// namespace engine::test::app
+}// namespace app

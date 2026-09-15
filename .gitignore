@@ -21,3 +21,4 @@ app/APP
 .venv
 engine/libs/glfw/src
 build/
+app/imgui.ini

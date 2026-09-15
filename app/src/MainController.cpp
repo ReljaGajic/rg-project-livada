@@ -2,6 +2,7 @@
 #include <app/MainController.hpp>
 #include <engine/core/Engine.hpp>
 #include <engine/graphics/GraphicsController.hpp>
+#include <engine/resources/ResourcesController.hpp>
 #include <memory>
 #include <spdlog/spdlog.h>
 
@@ -48,7 +49,9 @@ void MainController::begin_draw() {
 }
 
 void MainController::draw() {
-    //SKybox i livadu treba da crtam polako
+    draw_skybox();
+    draw_livada();
+    //livadu treba da crtam polako
 }
 
 void MainController::end_draw() {
@@ -57,8 +60,19 @@ void MainController::end_draw() {
 
 void MainController::draw_skybox() {
     auto shader = engine::core::Controller::get<engine::resources::ResourcesController>()->shader("skybox");
-    auto skybox_cube = engine::core::Controller::get<engine::resources::ResourcesController>()->skybox("skybox");
+    auto skybox_cube = engine::core::Controller::get<engine::resources::ResourcesController>()->skybox("night");
     engine::core::Controller::get<engine::graphics::GraphicsController>()->draw_skybox(shader, skybox_cube);
+}
+
+void MainController::draw_livada() {
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    auto shader = engine::core::Controller::get<engine::resources::ResourcesController>()->shader("basic");
+    auto plane = engine::core::Controller::get<engine::resources::ResourcesController>()->model("livada");
+    shader->use();
+    shader->set_mat4("projection", graphics->projection_matrix());
+    shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_mat4("model", glm::mat4(1.0f));
+    plane->draw(shader);
 }
 
 void MainController::update_camera() {
@@ -85,4 +99,4 @@ void MainController::update_camera() {
     camera->rotate_camera(mouse.dx, mouse.dy);
     camera->zoom(mouse.scroll);
 }
-}// namespace engine::test::app
+}// namespace app
