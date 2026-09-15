@@ -1,7 +1,7 @@
-
 #ifndef GUICONTROLLER_HPP
 #define GUICONTROLLER_HPP
 
+#include <app/MainController.hpp>
 #include <engine/core/Engine.hpp>
 
 namespace app {

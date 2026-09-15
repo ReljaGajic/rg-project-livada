@@ -85,9 +85,9 @@ void MainController::draw_livada() {
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_mat4("model", glm::mat4(1.0f));
     shader->set_vec3("viewPos", graphics->camera()->Position);
-    shader->set_vec3("dirLightDirection", glm::normalize(glm::vec3(-0.8f, -1.0f, -0.3f)));
-    shader->set_vec3("dirLightAmbient", glm::vec3(0.05f, 0.05f, 0.15f));
-    shader->set_vec3("dirLightDiffuse", glm::vec3(0.2f, 0.2f, 0.4f));
+    shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light_direction));
+    shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light_ambient));
+    shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light_diffuse));
     shader->set_float("shininess", 65.0f);
 
     float spot_intensity = baterijska_snaga();
