@@ -39,6 +39,19 @@ private:
     void update_camera();
 
     bool m_cursor_enabled{true};
+
+    enum class FlashlightState {
+        Off,
+        Ukljucivanje,
+        Treperi,
+        On
+    };
+
+    void update_baterijska();
+    float baterijska_snaga() const;
+
+    FlashlightState m_baterijska_stanje{FlashlightState::Off};
+    float m_baterijska_timer{0.0f};
 };
 }// namespace app
 #endif//MAINCONTROLLER_HPP
