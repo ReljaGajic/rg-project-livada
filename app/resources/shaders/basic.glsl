@@ -39,8 +39,6 @@ uniform vec3 dirLightAmbient;
 uniform vec3 dirLightDiffuse;
 uniform vec3 dirLightSpecular;
 
-uniform float shininess;
-
 uniform vec3 spotLightPosition;
 uniform vec3 spotLightDirection;
 uniform vec3 spotLightAmbient;
@@ -61,17 +59,14 @@ vec3 NadjiSpotLight(vec3 norm, vec3 viewDir, vec3 baseColor) {
     float intensity = clamp((t - spotLightOuterCutOff) / gama, 0.0, 1.0);
 
     float diff = max(dot(norm, lightDir), 0.0);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
 
     float distance = length(spotLightPosition - FragPos);
     float attenuation = 1.0 / (spotLightC + spotLightL * distance + spotLightQ * distance * distance);
 
     vec3 ambient = spotLightAmbient * baseColor;
     vec3 diffuse = spotLightDiffuse * diff * baseColor;
-    vec3 specular = spotLightSpecular * spec;
 
-    return (ambient + diffuse + specular) * attenuation * intensity;
+    return (ambient + diffuse) * attenuation * intensity;
 }
 
 void main() {
@@ -80,17 +75,13 @@ void main() {
     vec3 norm = normalize(Normal);
     vec3 lightDir = normalize(-dirLightDirection);
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
 
     vec3 ambient = dirLightAmbient * baseColor;
 
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = dirLightDiffuse * diff * baseColor;
 
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-    vec3 specular = dirLightSpecular * spec;
-
-    vec3 rez = ambient + diffuse + specular;
+    vec3 rez = ambient + diffuse;
     rez += NadjiSpotLight(norm,viewDir,baseColor);
 
     FragColor = vec4(rez, 1.0);

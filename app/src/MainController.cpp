@@ -63,7 +63,7 @@ void MainController::begin_draw() {
 void MainController::draw() {
     draw_skybox();
     draw_livada();
-    //livadu treba da crtam polako
+    draw_drvo();
 }
 
 void MainController::end_draw() {
@@ -88,7 +88,6 @@ void MainController::draw_livada() {
     shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light_direction));
     shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light_ambient));
     shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light_diffuse));
-    shader->set_float("shininess", 65.0f);
 
     float spot_intensity = baterijska_snaga();
     shader->set_vec3("spotLightPosition", graphics->camera()->Position);
@@ -104,6 +103,42 @@ void MainController::draw_livada() {
 
     livada->draw(shader);
 }
+
+void MainController::draw_drvo() {
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++) {
+            auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+            auto shader = engine::core::Controller::get<engine::resources::ResourcesController>()->shader("basic");
+            auto drvo = engine::core::Controller::get<engine::resources::ResourcesController>()->model("drvo");
+            shader->use();
+            shader->set_mat4("projection", graphics->projection_matrix());
+            shader->set_mat4("view", graphics->camera()->view_matrix());
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(7.0f + 3.2f * i - 10.0f * j, -1.0f, -2.0f - 3.5f * i));
+            shader->set_mat4("model", model);
+            shader->set_vec3("viewPos", graphics->camera()->Position);
+            shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light_direction));
+            shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light_ambient));
+            shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light_diffuse));
+
+            float spot_intensity = baterijska_snaga();
+            shader->set_vec3("spotLightPosition", graphics->camera()->Position);
+            shader->set_vec3("spotLightDirection", graphics->camera()->Front);
+            shader->set_vec3("spotLightAmbient", glm::vec3(0.0f, 0.0f, 0.0f));
+            shader->set_vec3("spotLightDiffuse", spot_intensity * glm::vec3(1.0f, 1.0f, 1.0f));
+            shader->set_vec3("spotLightSpecular", spot_intensity * glm::vec3(1.0f, 1.0f, 1.0f));
+            shader->set_float("spotLightCutOff", glm::cos(glm::radians(12.5f)));
+            shader->set_float("spotLightOuterCutOff", glm::cos(glm::radians(20.0f)));
+            shader->set_float("spotLightC", 1.0f);
+            shader->set_float("spotLightL", 0.1f);
+            shader->set_float("spotLightQ", 0.1f);
+
+            drvo->draw(shader);
+        }
+    }
+}
+
 
 void MainController::update_camera() {
     auto gui = engine::core::Controller::get<GUIController>();

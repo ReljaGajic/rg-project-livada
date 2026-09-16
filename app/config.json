@@ -4,6 +4,10 @@
         "livada":{
             "path": "livada/livada.obj",
             "flip_uvs": false
+        },
+        "drvo":{
+            "path": "drvo/Tree1.obj",
+            "flip_uvs": false
         }
     }
   },

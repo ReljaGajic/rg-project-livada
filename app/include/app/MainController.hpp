@@ -37,6 +37,8 @@ private:
 
     void draw_livada();
 
+    void draw_drvo();
+
     void end_draw() override;
 
     void draw_skybox();
