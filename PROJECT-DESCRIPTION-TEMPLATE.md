@@ -1,14 +1,16 @@
 # {NAME-OF-THE-PROJECT}
 
-{INDEX} - {STUDENT-FULL-NAME}  
-{PROJECT DESCRIPTION}
+{131/22} - {Relja Gajic}  
+{Livada sa drvecem nocu, imamo baterijsku lampu da nam osvetli}
 
 ## Controls
 
-{BUTTON1} -> {ACTION1}  
-{BUTTON2} -> {ACTION2}  
-...  
-{BUTTONN} -> {ACTIONN}
+{F1} -> {TOGGLE CURSOR}  
+{F2} -> {TOGGLE GUI}
+{ESCAPE} -> {EXIT APP}  
+{W A S D} -> {MOVEMENT KEYS}  
+{MOUSE} -> {LOOK AROUND}  
+{T} -> {FLASHLIGHT ON/OFF}  
 
 ## Features
 
@@ -36,12 +38,12 @@
 
 ## Models:
 
-[link1]   
+[Drvo - "5 low poly trees" by quaternius, OpenGameArt.org, CC0 - https://opengameart.org/content/5-low-poly-trees]   
 [link2]
 
 ## Textures
 
-[link1]  
-[link2]
+[https://opengameart.org/content/night-skyboxes]  
+[https://opengameart.org/content/seamless-grass-texture-ii]
 
 {OTHER-RESOURCES}
