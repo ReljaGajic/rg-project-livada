@@ -12,13 +12,13 @@ public:
     void on_mouse_move(engine::platform::MousePosition position) override;
 };
 
-struct DirLight {///STRUKTURA DIRLIGHT UBACENA KAO I SVE ODGOVARAJUCE PROMENE U CPP I GUI CPP
+struct DirLight {
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 direction;
 };
 
-struct Flashlight {//STRUKTURA FLASHLIGHT UBACENA, KAO I SVE ODGOVARAJUCE PROMENE U CPP I GUI CPP
+struct Flashlight {
     enum class FlashlightState {
         Off,
         Ukljucivanje,
@@ -36,7 +36,7 @@ public:
         return "app::MainController";
     }
 
-    DirLight &dir_light() { return m_dir_light; }//GETTER PROMENJEN TKD POKAZUJE NA STRUKTURU
+    DirLight &dir_light() { return m_dir_light; }
 
 private:
     void initialize() override;
