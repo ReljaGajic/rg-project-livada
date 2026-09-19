@@ -1,6 +1,7 @@
 #include <app/GUIController.hpp>
 #include <app/LivadaApp.hpp>
 #include <app/MainController.hpp>
+#include <spdlog/spdlog.h>
 
 namespace app {
 void LivadaApp::app_setup() {
@@ -12,5 +13,13 @@ void LivadaApp::app_setup() {
 }// namespace app
 
 int main(int argc, char **argv) {
-    return std::make_unique<app::LivadaApp>()->run(argc, argv);
+    try {
+        return std::make_unique<app::LivadaApp>()->run(argc, argv);
+    } catch (const engine::util::EngineError &e) {
+        spdlog::error("{}", e.report());
+        return 1;
+    } catch (const std::exception &e) {
+        spdlog::error("Unhandeled exception: {}", e.what());
+        return 1;
+    }
 }

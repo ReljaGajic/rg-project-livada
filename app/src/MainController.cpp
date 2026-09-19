@@ -39,13 +39,13 @@ void MainController::poll_events() {
         platform->set_enable_cursor(m_cursor_enabled);
     }
     if (platform->key(engine::platform::KEY_T).state() == engine::platform::Key::State::JustPressed) {
-        if (m_baterijska_stanje == FlashlightState::Off) {
-            m_baterijska_stanje = FlashlightState::Ukljucivanje;
-            m_baterijska_timer = 0.0f;
+        if (m_baterijska.stanje == Flashlight::FlashlightState::Off) {
+            m_baterijska.stanje = Flashlight::FlashlightState::Ukljucivanje;
+            m_baterijska.timer = 0.0f;
             spdlog::info("ACTION_X: T pressed, flashlight powering on");
         } else {
-            m_baterijska_stanje = FlashlightState::Off;
-            m_baterijska_timer = 0.0f;
+            m_baterijska.stanje = Flashlight::FlashlightState::Off;
+            m_baterijska.timer = 0.0f;
             spdlog::info("Flashlight turned off");
         }
     }
@@ -85,9 +85,9 @@ void MainController::draw_livada() {
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_mat4("model", glm::mat4(1.0f));
     shader->set_vec3("viewPos", graphics->camera()->Position);
-    shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light_direction));
-    shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light_ambient));
-    shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light_diffuse));
+    shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light.direction));
+    shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light.ambient));
+    shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light.diffuse));
 
     float spot_intensity = baterijska_snaga();
     shader->set_vec3("spotLightPosition", graphics->camera()->Position);
@@ -118,9 +118,9 @@ void MainController::draw_drvo() {
             model = glm::translate(model, glm::vec3(7.0f + 3.2f * i - 10.0f * j, -1.0f, -2.0f - 3.5f * i));
             shader->set_mat4("model", model);
             shader->set_vec3("viewPos", graphics->camera()->Position);
-            shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light_direction));
-            shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light_ambient));
-            shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light_diffuse));
+            shader->set_vec3("dirLightDirection", glm::normalize(m_dir_light.direction));
+            shader->set_vec3("dirLightAmbient", glm::vec3(m_dir_light.ambient));
+            shader->set_vec3("dirLightDiffuse", glm::vec3(m_dir_light.diffuse));
 
             float spot_intensity = baterijska_snaga();
             shader->set_vec3("spotLightPosition", graphics->camera()->Position);
@@ -172,20 +172,20 @@ void MainController::update_baterijska() {
     constexpr float trep_trep_trepni_s = 0.3f;// idemo za treptanje
     constexpr float pun_gas_svetli_s = 1.5f;  // ovde grmi lampa
 
-    switch (m_baterijska_stanje) {
-        case FlashlightState::Ukljucivanje:
-            m_baterijska_timer += dt;
-            if (m_baterijska_timer >= trep_trep_trepni_s) {
-                m_baterijska_stanje = FlashlightState::Treperi;
-                m_baterijska_timer = 0.0f;
+    switch (m_baterijska.stanje) {
+        case Flashlight::FlashlightState::Ukljucivanje:
+            m_baterijska.timer += dt;
+            if (m_baterijska.timer >= trep_trep_trepni_s) {
+                m_baterijska.stanje = Flashlight::FlashlightState::Treperi;
+                m_baterijska.timer = 0.0f;
                 spdlog::info("EVENT_A triggered: flashlight flickering");
             }
             break;
-        case FlashlightState::Treperi:
-            m_baterijska_timer += dt;
-            if (m_baterijska_timer >= pun_gas_svetli_s) {
-                m_baterijska_stanje = FlashlightState::On;
-                m_baterijska_timer = 0.0f;
+        case Flashlight::FlashlightState::Treperi:
+            m_baterijska.timer += dt;
+            if (m_baterijska.timer >= pun_gas_svetli_s) {
+                m_baterijska.stanje = Flashlight::FlashlightState::On;
+                m_baterijska.timer = 0.0f;
                 spdlog::info("EVENT_B triggered: flashlight stabilized");
             }
             break;
@@ -195,12 +195,12 @@ void MainController::update_baterijska() {
 }
 
 float MainController::baterijska_snaga() const {
-    switch (m_baterijska_stanje) {
-        case FlashlightState::Treperi: {
-            float trep = 0.6f + 0.4f * std::sin(m_baterijska_timer * 30.0f) * std::sin(m_baterijska_timer * 5.0f);
+    switch (m_baterijska.stanje) {
+        case Flashlight::FlashlightState::Treperi: {
+            float trep = 0.6f + 0.4f * std::sin(m_baterijska.timer * 30.0f) * std::sin(m_baterijska.timer * 5.0f);
             return glm::clamp(trep, 0.0f, 1.0f);//da mi ne ispadne iz 0 1 opsega
         }
-        case FlashlightState::On:
+        case Flashlight::FlashlightState::On:
             return 1.0f;
         default:
             return 0.0f;

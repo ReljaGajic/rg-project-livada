@@ -28,9 +28,10 @@ void GUIController::draw() {
 
     ImGui::Begin("Lighting");
     ImGui::Text("Directional light (moonlight)");
-    ImGui::ColorEdit3("Moon ambient", &main_controller->dir_light_ambient()[0]);
-    ImGui::ColorEdit3("Moon diffuse", &main_controller->dir_light_diffuse()[0]);
-    ImGui::SliderFloat3("Moon direction", &main_controller->dir_light_direction()[0], -0.1f, 1.0f);
+    auto &dir_light = main_controller->dir_light();
+    ImGui::ColorEdit3("Moon ambient", &dir_light.ambient[0]);
+    ImGui::ColorEdit3("Moon diffuse", &dir_light.diffuse[0]);
+    ImGui::SliderFloat3("Moon direction", &dir_light.direction[0], -1.0f, 1.0f);
     ImGui::End();
 
     graphics->end_gui();
